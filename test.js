@@ -39,7 +39,7 @@ const elements = [];
 traverse(ast, {
   ExportDefaultDeclaration(path) {
     path.traverse({
-      ReturnStatement(path) {
+      BlockStatement(path) {
         path.traverse({
           JSXElement(path) {
             elements.push(path.node);
