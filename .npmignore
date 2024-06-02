@@ -1,0 +1,8 @@
+# Abaikan semua
+*
+
+# Sertakan hanya folder dist dan file penting lainnya
+!dist/
+!package.json
+!README.md
+!bin
