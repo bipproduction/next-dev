@@ -1,0 +1,46 @@
+/Users/bip/Documents/projects/makuro_projects/next-dev
+├── README.md
+├── assets
+|  └── logo_next_dev.png
+├── bin
+|  ├── clearDevBox.ts
+|  ├── generateApi.ts
+|  ├── generateDevBox.ts
+|  ├── generatePage.ts
+|  ├── isNextRootDir.ts
+|  └── next-dev.ts
+├── components.json
+├── dist
+|  ├── bin
+|  |  ├── clearDevBox.d.ts
+|  |  ├── clearDevBox.js
+|  |  ├── generateApi.d.ts
+|  |  ├── generateApi.js
+|  |  ├── generateDevBox.d.ts
+|  |  ├── generateDevBox.js
+|  |  ├── generatePage.d.ts
+|  |  ├── generatePage.js
+|  |  ├── isNextRootDir.d.ts
+|  |  ├── isNextRootDir.js
+|  |  ├── next-dev.d.ts
+|  |  └── next-dev.js
+|  └── src
+|     ├── index.d.ts
+|     ├── index.js
+|     ├── ui
+|     └── util
+├── package.json
+├── src
+|  ├── index.ts
+|  ├── ui
+|  |  ├── ButtonToggle.tsx
+|  |  └── DevBox.tsx
+|  └── util
+|     └── evn.ts
+├── tsconfig.json
+├── xtree.txt
+└── yarn.lock
+
+directory: 177 file: 943
+
+ignored: directory (7)
