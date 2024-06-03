@@ -1,6 +1,6 @@
-Berikut adalah README yang telah disesuaikan dan dibuat lebih interaktif untuk CLI app Anda:
-
 # CLI Tool for Next.js Project Automation
+
+![logo](/assets/logo_next_dev.png)
 
 ## Overview
 
