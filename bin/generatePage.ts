@@ -3,7 +3,7 @@ import readdirp from "readdirp";
 import fs from "fs";
 import _ from "lodash";
 
-async function genPage() {
+async function genPage(argv: any) {
     const name = "genPage";
 
     const list: any[] = []

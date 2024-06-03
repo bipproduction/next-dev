@@ -3,7 +3,7 @@ import readdirp from "readdirp";
 import fs from "fs";
 import _ from "lodash";
 
-const generateApi = async () => {
+const generateApi = async (argv: any) => {
     const name = "genFetchApi";
 
     const list: any[] = []
