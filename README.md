@@ -1,6 +1,6 @@
 # CLI Tool for Next.js Project Automation
 
-![logo](/assets/logo_next_dev.png)
+![logo](https://github.com/bipproduction/next-dev/raw/main/assets/logo_next_dev.png)
 
 ## Overview
 
