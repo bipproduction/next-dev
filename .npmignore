@@ -2,8 +2,7 @@
 *
 
 # Sertakan hanya folder dist dan file penting lainnya
-!assets
 !dist/
+!dist/**
 !package.json
 !README.md
-!bin

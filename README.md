@@ -1,10 +1,12 @@
+Tentu, berikut adalah markdown yang telah diperbaiki:
+
 # CLI Tool for Next.js Project Automation
 
 ![logo](https://github.com/bipproduction/next-dev/raw/main/assets/logo_next_dev.png)
 
 ## Overview
 
-This CLI tool provides automation for common tasks in a Next.js project. It includes commands for generating and clearing `DevBox` components, generating API endpoints, and generating pages. It also ensures the required project structure and configuration files are present.
+This CLI tool provides automation for common tasks in a Next.js project. It includes commands for generating and clearing `DevBox` components, generating API endpoints, generating pages, and more. It also ensures the required project structure and configuration files are present.
 
 ## Prerequisites
 
@@ -54,6 +56,8 @@ This tool provides several commands that can be run using `next-dev`.
 - **clear-box**: Clears `DevBox` components from `.tsx` files.
 - **gen-api**: Generates API endpoints.
 - **gen-page**: Generates new pages.
+- **gen-tree**: Generates a tree structure of the project.
+- **gen-model**: Generates TypeScript models from JSON files, URLs, or directories.
 
 ### Example Usage
 
@@ -75,6 +79,16 @@ This tool provides several commands that can be run using `next-dev`.
 4. **Generate Page**:
    ```sh
    next-dev gen-page
+   ```
+
+5. **Generate Tree**:
+   ```sh
+   next-dev gen-tree --name myTree
+   ```
+
+6. **Generate Model**:
+   ```sh
+   next-dev gen-model --dir ./path/to/json/files --out ./src/models
    ```
 
 ### Adding `DevBox` Components Automatically
@@ -148,6 +162,13 @@ next-dev gen-box --log
 
 - **gen-page**:
   - Generates new page boilerplate.
+
+- **gen-tree**:
+  - Generates a tree structure of the project.
+
+- **gen-model**:
+  - Generates TypeScript models from JSON files, URLs, or directories.
+  - Saves each JSON file from the input directory to the output directory as separate TypeScript files with corresponding names.
 
 ### Error Handling
 
