@@ -7,9 +7,10 @@ import prettier from 'prettier';
 
 export default async function generatePath(argv: any) {
     const log: boolean = argv.log;
-    console.log(log ? "✨✨✨ START WITH LOG ✨✨✨" : "✨✨✨ START WITHOUT LOG ✨✨✨");
+    console.log(log ? "START WITH LOG" : "START WITHOUT LOG ");
     for await (const entry of readdirp(path.join(process.cwd(), '/src/ui'), { fileFilter: ['*.tsx'] })) {
-        const fileContent = await fs.promises.readFile(entry.fullPath, 'utf8');
+        let fileContent = await fs.promises.readFile(entry.fullPath, 'utf8');
+        fileContent = useDevModify(fileContent, log);
         if (fileContent.includes("use dev")) {
             await processDevBox({ stringCode: fileContent, fullPath: entry.fullPath, log });
         }
@@ -17,6 +18,40 @@ export default async function generatePath(argv: any) {
 
     console.log(`✨✨✨ DONE ✨✨✨`);
 }
+
+function useDevModify(text: string, log: boolean): string {
+    const lines = text.split('\n');
+
+    // Check if "use dev" is already in the first or second line
+    if (lines.length > 0 && lines[0].includes('use dev')) {
+        log && console.log(`use dev already present in ${path.basename(lines[0])}`);
+        return text; // "use dev" already present in the first line, no need to modify
+    }
+    if (lines.length > 1 && lines[1].includes('use dev')) {
+        log && console.log(`use dev already present in ${path.basename(lines[1])}`);
+        return text; // "use dev" already present in the second line, no need to modify
+    }
+
+    // Check if the first line has "use client"
+    if (lines.length > 0 && lines[0].includes('use client')) {
+        // If the second line is empty, add "use dev"
+        log && console.log(`use dev added to ${path.basename(lines[0])}`);
+        if (lines.length === 1 || lines[1].trim() === '') {
+            log && console.log(`use dev added to ${path.basename(lines[0])}`);
+            lines.splice(1, 0, '\"use dev\"'); // Add "use dev" to the second line
+        } else {
+            log && console.log(`use dev added to ${path.basename(lines[1])}`);
+            lines.splice(1, 0, '\"use dev\"'); // Insert "use dev" at the second line
+        }
+    } else {
+        // Add "use dev" to the first line
+        log && console.log(`use dev added to ${path.basename(lines[0])}`);
+        lines.unshift('\"use dev\"');
+    }
+
+    return lines.join('\n');
+}
+
 
 async function processDevBox({ stringCode, fullPath, log }: { stringCode: string, fullPath: string, log: boolean }) {
     let formattedCode = await prettier.format(stringCode, { parser: "typescript" });
@@ -30,7 +65,7 @@ async function processDevBox({ stringCode, fullPath, log }: { stringCode: string
             plugins: ["jsx", "typescript"]
         });
     } catch (error) {
-        console.error("Parsing error:", (error as Error).message);
+        console.error(`Parsing error: ${fullPath}`.red, (error as Error).message);
         return;
     }
 
@@ -102,8 +137,8 @@ async function processDevBox({ stringCode, fullPath, log }: { stringCode: string
         const finalFormattedCode = await prettier.format(newCode, { parser: "typescript" });
 
         await fs.promises.writeFile(fullPath, finalFormattedCode, "utf8");
-        console.log(`Updated file: ${fullPath}`);
+        log && console.log(`Updated file: ${fullPath}`);
     } catch (error) {
-        console.error("Traversal error:".red, (error as Error).message);
+        console.error(`Traversal error: ${fullPath}`.red, (error as Error).message);
     }
 }

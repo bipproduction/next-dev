@@ -6,12 +6,12 @@ import { evn } from '../util/evn'
 const DevBox = ({ path, children }: { path?: string | null, children: React.ReactNode }) => {
     const [isDev, setIsDev] = useLocalStorage({ key: "isDev", defaultValue: true })
     const { hovered, ref } = useHover()
-    useShallowEffect(() => {
-        evn.on("isDev", setIsDev)
-        return () => {
-            evn.off("isDev", setIsDev);
-        };
-    }, [setIsDev])
+    // useShallowEffect(() => {
+    //     evn.on("isDev", setIsDev)
+    //     return () => {
+    //         evn.off("isDev", setIsDev);
+    //     };
+    // }, [setIsDev])
 
     return (
         <div

@@ -2,17 +2,26 @@ import path from "path";
 import readdirp from "readdirp";
 import fs from "fs";
 import _ from "lodash";
+import * as prettier from 'prettier'
 
 const generateApi = async (argv: any) => {
-    const name = "genFetchApi";
+    const listName = ["genFetchApiServer", "genFetchApiClient"];
 
-    const list: any[] = []
+    let list: any[] = [
+        "\nhost: ''\n",
+        "init(host:string){\nthis.host = host;\n}"
+    ]
     for await (const entry of readdirp(path.join(process.cwd(), '/src/app/api'), { fileFilter: '*.ts' })) {
         list.push(generateFunctionCode(entry.fullPath, entry.path));
     }
 
-    fs.writeFileSync(path.join(process.cwd(), `src/util/${name}.ts`,), `import app_config from "./app_config";\n export const ${name} = {${list.join(',')}};`, { encoding: 'utf8' });
-    console.log(`✨✨✨ file://src/util/${name}.ts DONE ✨✨✨`)
+    for (const name of listName) {
+        const text = `export const ${name} = {\n${list.join(',\n')} \n};`
+        const formattedText = await prettier.format(text, { parser: "typescript" });
+        fs.writeFileSync(path.join(process.cwd(), `src/util/${name}.ts`,), formattedText, { encoding: 'utf8' });
+        console.log(`generate ${name} DONE`)
+    }
+
 }
 
 function generateFunctionName(filePath: string) {
@@ -90,7 +99,8 @@ function generateFunctionCode(fullPath: string, filePath: string) {
     const bodyParams = detectRequestBodyType(fullPath);
     let bodyString = '';
     if (method === 'POST' && bodyParams.length > 0) {
-        bodyString = ', body: { ' + bodyParams.map(param => param.name + ': ' + param.type).join(', ') + ' }';
+        // bodyString = ', body: { ' + bodyParams.map(param => param.name + ': ' + param.type).join(', ') + ' }';
+        bodyString = ', body: string';
     }
 
     if (params.length > 0) {
@@ -101,10 +111,9 @@ function generateFunctionCode(fullPath: string, filePath: string) {
  *  @param {boolean} isServer
  *  @param {string} searchParams ?key=value
  */
-${functionName} : async ({${paramObjString}, isServer${_.isEmpty(bodyParams) ? "" : ",body"}, searchParams}: {${paramString}${bodyString}, isServer?: boolean${bodyString}, searchParams?: string}) => {
+async ${functionName} ({${paramObjString}, ${method === 'POST' ? "body ," : ""} searchParams}: {${paramString},${bodyString}${method === 'POST' ? "body?: string ," : ""} searchParams?: string}) {
    
-    return fetch(\`\${isServer && app_config.host || ''}/api/${apiPath.replace('route.ts', '').slice(0, -1)}\$\{searchParams || ''}\`, { method: '${method}', ${_.isEmpty(bodyParams) ? "" : "body: JSON.stringify(body),"} cache: 'no-cache' })
-        .then(res => res.json());
+    return fetch(\`\${this.host}/api/${apiPath.replace('route.ts', '').slice(0, -1)}\$\{searchParams || ''}\`, { method: '${method}', ${method === 'POST' ? "body ," : ""} cache: 'no-cache' });
 }
 `;
     } else {
@@ -115,10 +124,9 @@ ${functionName} : async ({${paramObjString}, isServer${_.isEmpty(bodyParams) ? "
  *  @param {boolean} isServer
  *  @param {string} searchParams ?key=value
  */
-${functionName} : async ({isServer${_.isEmpty(bodyParams) ? "" : ",body"}, searchParams}: {isServer?: boolean${bodyString}, searchParams?: string}) => {
+async ${functionName} ({ ${method === 'POST' ? "body ," : ""} searchParams}: {${method === 'POST' ? "body?: string ," : ""} searchParams?: string}) {
 
-    return fetch(\`\${isServer && app_config.host || ''}/api/${apiPath.replace('route.ts', '').slice(0, -1)}\$\{searchParams || ''}\`, { method: '${method}', ${_.isEmpty(bodyParams) ? "" : "body: JSON.stringify(body),"}  cache: 'no-cache' })
-        .then(res => res.json());
+    return fetch(\`\${this.host}/api/${apiPath.replace('route.ts', '').slice(0, -1)}\$\{searchParams || ''}\`, { method: '${method}', ${method === 'POST' ? "body ," : ""}  cache: 'no-cache' });
 }
 `;
     }

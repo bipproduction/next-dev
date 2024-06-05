@@ -7,12 +7,14 @@ const ButtonToogle = ({ children }: { children: (isDev: boolean) => React.ReactN
     const [isDev, setIsDev] = useLocalStorage({ key: "isDev", defaultValue: false })
 
     const onclik = () => {
-        evn.emit("isDev", !isDev)
+        // evn.emit("isDev", !isDev)
+        setIsDev(!isDev)
+        
     }
 
-    useShallowEffect(() => {
-        evn.on("isDev", setIsDev)
-    }, [])
+    // useShallowEffect(() => {
+    //     evn.on("isDev", setIsDev)
+    // }, [])
 
     return <div
         onClick={onclik}
