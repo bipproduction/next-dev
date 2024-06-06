@@ -7,7 +7,9 @@ function isNextJsRootDir() {
     if (configExists) {
         return true;
     }
-    return false;
+
+    console.log("please run in next project root".yellow);
+    process.exit(1);
 
 }
 

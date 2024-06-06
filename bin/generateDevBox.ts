@@ -5,7 +5,7 @@ import * as parser from '@babel/parser';
 import traverse from '@babel/traverse';
 import prettier from 'prettier';
 
-export default async function generatePath(argv: any) {
+export default async function generateDevBox(argv: any) {
     const log: boolean = argv.log;
     console.log(log ? "START WITH LOG" : "START WITHOUT LOG ");
     for await (const entry of readdirp(path.join(process.cwd(), '/src/ui'), { fileFilter: ['*.tsx'] })) {
